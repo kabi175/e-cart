@@ -1,18 +1,17 @@
-FROM node:13.12.0-alpine
+FROM node:alpine
 
 WORKDIR /react/src/app
 
 ENV PATH /app/node_modules/.bin:$PATH
 
-COPY package.json ./
-COPY yarn.lock ./
+COPY package.json .
 
-RUN yarn install --silent
-RUN yarn install react-scripts@3.4.1 -g --silent
+COPY yarn.lock .
 
-COPY . .
+RUN yarn 
+
+COPY . ./
 
 EXPOSE 8080
 
-# start app
-CMD ["npm", "start"]
+CMD ["yarn", "start"]
