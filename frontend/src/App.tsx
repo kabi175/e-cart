@@ -1,11 +1,10 @@
-import { Component } from 'react'
+import React from 'react'
+import 'bulma/css/bulma.min.css'
+import 'bulma/sass/utilities/_all.sass'
+import Router from './router/Router'
 
-export class App extends Component {
-  render() {
-    return (
-      <>
-        <h1> Hello World :) </h1>
-      </>
-    )
-  }
+const App: React.FC = () => {
+  return <Router />
 }
+
+export default App

@@ -1,4 +1,10 @@
 import * as ReactDOM from 'react-dom'
-import { App } from './App'
+import { RootStateProvider } from './store/store'
+import App from './App'
 
-ReactDOM.render(<App />, document.getElementById('root'))
+ReactDOM.render(
+  <RootStateProvider>
+    <App />
+  </RootStateProvider>,
+  document.getElementById('root')
+)
