@@ -14,7 +14,6 @@ services:
       # The Web UI (enabled by --api.insecure=true)
       - "8080:8080"
     volumes:
-      # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
 
   postgres-account:
@@ -23,8 +22,6 @@ services:
       - POSTGRES_PASSWORD=password
     ports:
       - "5432:5432"
-    #   Set a volume for data and initial sql script
-    #   May configure initial db for future demo
     volumes:
       - "pgdata_account:/var/lib/postgresql/data"
       # - ./init:/docker-entrypoint-initdb.d/
