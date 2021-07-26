@@ -16,6 +16,13 @@ import (
 
 func TestLogin(t *testing.T) {
 
+	userService := new(mocks.UserService)
+	router := mux.NewRouter()
+	NewHandler(&Config{
+		Router: router,
+		Us:     userService,
+	})
+
 	t.Run("success", func(t *testing.T) {
 		user := model.User{
 			Email:    "kabi@gmail.com",
@@ -23,21 +30,11 @@ func TestLogin(t *testing.T) {
 		}
 		reqBody, err := json.Marshal(user)
 		assert.NoError(t, err)
-		userService := new(mocks.UserService)
 		userService.On("Login", &user).Return("token", nil)
-
-		router := mux.NewRouter()
-		NewHandler(&Config{
-			Router: router,
-			Us:     userService,
-		})
 
 		req, err := http.NewRequest("GET", "/api/login", bytes.NewBuffer(reqBody))
 		req.Header.Set("Content-Type", "application/json")
-		if err != nil {
-			t.Fatal(err)
-		}
-
+		assert.NoError(t, err)
 		rr := httptest.NewRecorder()
 		router.ServeHTTP(rr, req)
 		assert.Equal(t, http.StatusOK, rr.Code)
@@ -50,19 +47,10 @@ func TestLogin(t *testing.T) {
 		}
 		reqBody, err := json.Marshal(user)
 		assert.NoError(t, err)
-		userService := new(mocks.UserService)
 		userService.On("Login", &user).Return("", apperror.NewAuthorization("incorrect password"))
 
-		router := mux.NewRouter()
-		NewHandler(&Config{
-			Router: router,
-			Us:     userService,
-		})
-
 		req, err := http.NewRequest("GET", "/api/login", bytes.NewBuffer(reqBody))
-		if err != nil {
-			t.Fatal(err)
-		}
+		assert.NoError(t, err)
 		req.Header.Set("Content-Type", "application/json")
 
 		rr := httptest.NewRecorder()
@@ -77,14 +65,7 @@ func TestLogin(t *testing.T) {
 		}
 		reqBody, err := json.Marshal(user)
 		assert.NoError(t, err)
-		userService := new(mocks.UserService)
 		userService.On("Login", &user).Return("", nil)
-
-		router := mux.NewRouter()
-		NewHandler(&Config{
-			Router: router,
-			Us:     userService,
-		})
 
 		req, err := http.NewRequest("GET", "/api/login", bytes.NewBuffer(reqBody))
 		assert.NoError(t, err)
