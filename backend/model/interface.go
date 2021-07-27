@@ -8,18 +8,20 @@ type UserService interface {
 
 type ProductService interface {
 	Create(*Product) error
-	Delete(ProductID) error
-	FindById(ProductID) (*Product, error)
-	FindByCategory(string) (*Product, error)
-	FindBySeller(SellerID) (*Product, error)
+	Delete(string) error
+	FindById(string) (*Product, error)
+	FindByCategory(string) ([]*Product, error)
+	FindBySeller(string) ([]*Product, error)
+	FetchByPage(int) ([]*Product, error)
 }
 
 type ProductRepository interface {
 	Create(*Product) error
 	Delete(string) error
 	FindById(string) (*Product, error)
-	FindByCategory(string) (*Product, error)
-	FindBySeller(string) (*Product, error)
+	FindByCategory(string) ([]*Product, error)
+	FindBySeller(string) ([]*Product, error)
+	Fetch(int, int) ([]*Product, error)
 }
 
 // UserRepository must implement the UserRepository interface

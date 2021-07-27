@@ -1,8 +1,6 @@
 package service
 
 import (
-	"bytes"
-
 	"github.com/kabi175/e-cart/backend/model"
 	"github.com/kabi175/e-cart/backend/model/apperror"
 	"github.com/segmentio/ksuid"
@@ -23,8 +21,7 @@ func NewProductService(c *ProductConfig) model.ProductService {
 }
 
 func (o *ProductService) Create(p *model.Product) error {
-	uuid := ksuid.New()
-	p.Id = model.ProductID(model.ProductID(uuid.Bytes()))
+	p.Id = ksuid.New().String()
 	err := o.Pr.Create(p)
 	if err != nil {
 		return apperror.NewInternal()
@@ -32,40 +29,41 @@ func (o *ProductService) Create(p *model.Product) error {
 	return nil
 }
 
-func (o *ProductService) Delete(pId model.ProductID) error {
-	pIdString := bytes.NewBuffer([]byte(pId)).String()
-	err := o.Pr.Delete(pIdString)
-	if err != nil {
-		if err.Error() == "no match" {
-			return apperror.NewNotFound("ProductID", pIdString)
-		}
-		return apperror.NewInternal()
-	}
-	return nil
+func (o *ProductService) Delete(pId string) error {
+	err := o.Pr.Delete(pId)
+	return err
 }
 
-func (o *ProductService) FindById(pId model.ProductID) (*model.Product, error) {
-	pIdString := bytes.NewBuffer([]byte(pId)).String()
-	product, err := o.Pr.FindById(pIdString)
+func (o *ProductService) FindById(pId string) (*model.Product, error) {
+	product, err := o.Pr.FindById(pId)
 	if err != nil {
 		return nil, apperror.NewInternal()
 	}
 	return product, nil
 }
 
-func (o *ProductService) FindByCategory(category string) (*model.Product, error) {
-	product, err := o.Pr.FindByCategory(category)
+func (o *ProductService) FindByCategory(category string) ([]*model.Product, error) {
+	products, err := o.Pr.FindByCategory(category)
 	if err != nil {
 		return nil, apperror.NewInternal()
 	}
-	return product, nil
+	return products, nil
 }
 
-func (o *ProductService) FindBySeller(sellerId model.SellerID) (*model.Product, error) {
-	sellerIdString := bytes.NewBuffer([]byte(sellerId)).String()
-	product, err := o.Pr.FindBySeller(sellerIdString)
+func (o *ProductService) FindBySeller(sellerId string) ([]*model.Product, error) {
+	products, err := o.Pr.FindBySeller(sellerId)
 	if err != nil {
 		return nil, apperror.NewInternal()
 	}
-	return product, nil
+	return products, nil
+}
+
+func (o *ProductService) FetchByPage(page int) ([]*model.Product, error) {
+	maxProductQueryCount := 30
+	limit := page * maxProductQueryCount
+	products, err := o.Pr.Fetch(limit, (page-1)*maxProductQueryCount)
+	if err != nil {
+		return nil, apperror.NewInternal()
+	}
+	return products, nil
 }
