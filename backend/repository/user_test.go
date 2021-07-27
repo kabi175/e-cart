@@ -18,11 +18,18 @@ const (
 	dbname   = "ecart"
 )
 
-func TestCreate(t *testing.T) {
+func connect() (*sql.DB, error) {
+
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
 	db, err := sql.Open("postgres", psqlInfo)
+	return db, err
+}
+
+func TestCreate(t *testing.T) {
+
+	db, err := connect()
 	assert.NoError(t, err)
 
 	t.Run("Success", func(t *testing.T) {
