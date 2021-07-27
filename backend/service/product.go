@@ -1,6 +1,8 @@
 package service
 
 import (
+	"log"
+
 	"github.com/kabi175/e-cart/backend/model"
 	"github.com/kabi175/e-cart/backend/model/apperror"
 	"github.com/segmentio/ksuid"
@@ -36,10 +38,7 @@ func (o *ProductService) Delete(pId string) error {
 
 func (o *ProductService) FindById(pId string) (*model.Product, error) {
 	product, err := o.Pr.FindById(pId)
-	if err != nil {
-		return nil, apperror.NewInternal()
-	}
-	return product, nil
+	return product, err
 }
 
 func (o *ProductService) FindByCategory(category string) ([]*model.Product, error) {
@@ -61,6 +60,7 @@ func (o *ProductService) FindBySeller(sellerId string) ([]*model.Product, error)
 func (o *ProductService) FetchByPage(page int) ([]*model.Product, error) {
 	maxProductQueryCount := 30
 	limit := page * maxProductQueryCount
+	log.Println(limit, (page-1)*maxProductQueryCount)
 	products, err := o.Pr.Fetch(limit, (page-1)*maxProductQueryCount)
 	if err != nil {
 		return nil, apperror.NewInternal()

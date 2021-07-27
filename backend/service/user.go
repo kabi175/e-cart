@@ -7,15 +7,18 @@ import (
 
 type UserService struct {
 	userRepo model.UserRepository
+	ts       model.TokenService
 }
 
-type Config struct {
-	userRepo model.UserRepository
+type UserConfig struct {
+	UserRepo     model.UserRepository
+	TokenService model.TokenService
 }
 
-func NewUserService(c *Config) model.UserService {
+func NewUserService(c *UserConfig) model.UserService {
 	return &UserService{
-		userRepo: c.userRepo,
+		userRepo: c.UserRepo,
+		ts:       c.TokenService,
 	}
 }
 
@@ -36,8 +39,8 @@ func (u *UserService) Login(user *model.User) (string, error) {
 	}
 
 	// generate token [todo]
-
-	return "token", nil
+	token, err := u.ts.GenerateToken(user)
+	return token, err
 }
 
 func (u *UserService) Signup(user *model.User) error {
