@@ -90,11 +90,10 @@ func (h *Handler) FindByCategoryProduct(w http.ResponseWriter, r *http.Request) 
 }
 
 func (h *Handler) FindBySellerProduct(w http.ResponseWriter, r *http.Request) {
-
 	vars := mux.Vars(r)
 	sellerID := vars["id"]
 
-	products, err := h.ps.FindByCategory(sellerID)
+	products, err := h.ps.FindBySeller(sellerID)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), apperror.Status(err))
@@ -116,9 +115,11 @@ func (h *Handler) FindBySellerProduct(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write(responseBody)
 }
+
 func (h *Handler) FindByIdProduct(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	productID := vars["id"]
+	log.Println(productID)
 	product, err := h.ps.FindById(productID)
 
 	if err != nil {
@@ -142,10 +143,12 @@ func (h *Handler) FindByIdProduct(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write(responseBody)
 }
+
 func (h *Handler) FetchByPageProduct(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	pageNumberString := vars["page"]
 
+	log.Println(pageNumberString)
 	pageNumberInt, err := strconv.Atoi(pageNumberString)
 	if err != nil {
 		err = apperror.NewBadRequest(err.Error())
