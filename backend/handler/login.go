@@ -15,20 +15,19 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), apperror.Status(err))
 		return
 	}
-	token, err := h.us.Login(user)
 
+	token, err := h.us.Login(user)
 	if err != nil {
-		log.Printf("failed to login: %s", err)
+		log.Println(err)
 		http.Error(w, err.Error(), apperror.Status(err))
 		return
 	}
+
 	cookie := http.Cookie{
 		Name:    "jwt-auth",
 		Value:   token,
-		Path:    "http://test.dev",
 		Expires: time.Now().Add(time.Hour * 24 * 5),
 	}
-
 	http.SetCookie(w, &cookie)
 	w.WriteHeader(http.StatusOK)
 	return
