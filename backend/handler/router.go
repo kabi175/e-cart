@@ -42,12 +42,12 @@ func NewHandler(c *Config) {
 
 	// products endpoint
 	product := root.PathPrefix("/product").Subrouter()
-	product.HandleFunc("/{id}", h.Login).Methods("GET")                       // get product by ID
-	product.HandleFunc("/search?page={page}", h.Login).Methods("GET")         // get product by page
-	product.HandleFunc("/search?seller={id}", h.Login).Methods("GET")         // get product by seller
-	product.HandleFunc("/search?category={category}", h.Login).Methods("GET") // get product by category
-	product.HandleFunc("/", h.Login).Methods("POST")                          // create porduct handler
-	product.HandleFunc("/{id}", h.Login).Methods("DELETE")                    // delete product handler
+	product.HandleFunc("/{id}", h.FindByIdProduct).Methods("GET")                      // get product by ID
+	product.HandleFunc("/page/{page}", h.FetchByPageProduct).Methods("GET")            // get product by page
+	product.HandleFunc("/seller/{id}", h.FindBySellerProduct).Methods("GET")           // get product by seller
+	product.HandleFunc("/category/{category}", h.FindByCategoryProduct).Methods("GET") // get product by category
+	product.HandleFunc("/", h.CreateProduct).Methods("POST")                           // create porduct handler
+	product.HandleFunc("/{id}", h.DeleteProduct).Methods("DELETE")                     // delete product handler
 
 	// user endpoint
 	user := root.
