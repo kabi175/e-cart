@@ -1,11 +1,5 @@
 package model
 
-// UserService must implement the UserService interface
-type UserService interface {
-	Signup(*User) error
-	Login(*User) (string, error)
-}
-
 type ProductService interface {
 	Create(*Product) error
 	Delete(string) error
@@ -22,10 +16,4 @@ type ProductRepository interface {
 	FindByCategory(string) ([]*Product, error)
 	FindBySeller(string) ([]*Product, error)
 	Fetch(int, int) ([]*Product, error)
-}
-
-// UserRepository must implement the UserRepository interface
-type UserRepository interface {
-	Create(*User) error
-	FindByEmail(string) (*User, error)
 }
