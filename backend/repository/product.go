@@ -68,18 +68,18 @@ func (pr *ProductRepository) Delete(pId string) error {
 
 func (pr *ProductRepository) FindById(pId string) (*model.Product, error) {
 	p := model.Product{}
-	query := `SELECT (id, seller_id, name, stock, category ) 
+	query := `SELECT id, seller_id, name, stock, category  
 						FROM products 
-						ORDER BY stock DESC
-						WHERE id=$1`
+						WHERE id = $1`
 
 	err := pr.DB.QueryRow(query, pId).Scan(&p.Id, &p.SellerID, &p.Name, &p.Stock, &p.Category)
-	if err != nil {
-		log.Println(err)
-		if err == sql.ErrNoRows {
 
+	if err != nil {
+
+		if err == sql.ErrNoRows {
 			return nil, apperror.NewNotFound("product_id", pId)
 		}
+
 		return nil, apperror.NewInternal()
 	}
 	return &p, nil
@@ -87,10 +87,9 @@ func (pr *ProductRepository) FindById(pId string) (*model.Product, error) {
 
 func (pr *ProductRepository) FindByCategory(category string) ([]*model.Product, error) {
 	var products []*model.Product
-	query := `SELECT (id, seller_id, name, stock, category )
+	query := `SELECT id, seller_id, name, stock, category 
 						FROM products
-						ORDER BY stock DESC
-						WHERE category=$1`
+						WHERE category = $1`
 	result, err := pr.DB.Query(query, category)
 	if err != nil {
 		return nil, apperror.NewInternal()
@@ -105,10 +104,9 @@ func (pr *ProductRepository) FindByCategory(category string) ([]*model.Product, 
 
 func (pr *ProductRepository) FindBySeller(sellerId string) ([]*model.Product, error) {
 	var products []*model.Product
-	query := `SELECT (id, seller_id, name, stock, category )
+	query := `SELECT id, seller_id, name, stock, category 
 						FROM products
-						ORDER BY stock DESC
-						WHERE seller_id=$1`
+						WHERE seller_id = $1`
 	result, err := pr.DB.Query(query, sellerId)
 	if err != nil {
 		return nil, apperror.NewInternal()
@@ -123,9 +121,8 @@ func (pr *ProductRepository) FindBySeller(sellerId string) ([]*model.Product, er
 
 func (pr *ProductRepository) Fetch(limit, offset int) ([]*model.Product, error) {
 	var products []*model.Product
-	query := `SELECT (id, seller_id, name, stock, category ) 
+	query := `SELECT id, seller_id, name, stock, category 
 						FROM products 
-						ORDER BY stock DESC
 						WHERE stock > 0 
 						LIMIT $1 OFFSET $2`
 
