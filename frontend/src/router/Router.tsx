@@ -4,6 +4,7 @@ import SafeRoute from './SafeRoute'
 import LogIn from '../pages/LogIn/LogIn'
 import Home from '../pages/Home/Home'
 import Product from '../pages/Product/Product'
+import Cart from '../pages/Cart/Cart'
 import Navbar from '../shared/Navbar/Navbar'
 const Router: React.FC = () => {
   return (
@@ -19,7 +20,12 @@ const Router: React.FC = () => {
           <LogIn />
         </Route>
         <Route path="/product">
+          <Navbar />
           <Product />
+        </Route>
+        <Route exact path="/cart">
+          <Navbar />
+          <Cart />
         </Route>
       </Switch>
     </BrowserRouter>

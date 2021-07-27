@@ -4,6 +4,7 @@ interface Product {
   id: number
   name: string
   price: number
+  imageUrl: string
 }
 
 interface PropType {
@@ -11,19 +12,17 @@ interface PropType {
 }
 
 const ProductCard: React.FC<PropType> = ({ product }) => {
-  const { id, name, price } = product
+  const { id, name, price, imageUrl } = product
 
   return (
     <Link to={`/product?id=${id}`}>
-      <div className="column is-full m-2 " style={{ width: 250, height: 350 }}>
+      <div
+        className="column is-full m-2 has-background-white"
+        style={{ width: 250, height: 350 }}
+      >
         <div className="card-image">
           <figure className="image is-1by1">
-            <img
-              width={200}
-              height={200}
-              src="https://bulma.io/images/placeholders/128x128.png"
-              alt="Placeholder"
-            />
+            <img width={200} height={200} src={imageUrl} alt="Placeholder" />
           </figure>
         </div>
         <div className="card-content">

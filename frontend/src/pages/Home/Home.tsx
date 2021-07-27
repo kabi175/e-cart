@@ -1,22 +1,21 @@
+import { observer } from 'mobx-react-lite'
 import React from 'react'
+import { useStoreContext } from '../../store/store'
 import ProductCard from './ProductCard'
+
 const Home: React.FC = () => {
+  const { productStore } = useStoreContext()
   return (
-    <div className="m-6 container has-background-lite">
-      <div className="columns is-mobile is-multiline is-centered">
-        <ProductCard product={{ id: 1, name: 'T-Shirt', price: 200 }} />
-        <ProductCard product={{ id: 2, name: 'T-Shirt', price: 200 }} />
-        <ProductCard product={{ id: 3, name: 'T-Shirt', price: 200 }} />
-        <ProductCard product={{ id: 4, name: 'T-Shirt', price: 200 }} />
-        <ProductCard product={{ id: 1, name: 'T-Shirt', price: 200 }} />
-        <ProductCard product={{ id: 1, name: 'T-Shirt', price: 200 }} />
-        <ProductCard product={{ id: 1, name: 'T-Shirt', price: 200 }} />
-        <ProductCard product={{ id: 1, name: 'T-Shirt', price: 200 }} />
-        <ProductCard product={{ id: 1, name: 'T-Shirt', price: 200 }} />
-        <ProductCard product={{ id: 1, name: 'T-Shirt', price: 200 }} />
+    <div className="has-background-light">
+      <div className="pt-6 container">
+        <div className="columns is-mobile is-multiline is-centered">
+          {productStore?.products?.map((product, id) => (
+            <ProductCard key={id} product={product} />
+          ))}
+        </div>
       </div>
     </div>
   )
 }
 
-export default Home
+export default observer(Home)

@@ -1,5 +1,7 @@
 import React, { useContext } from 'react'
 import { StoreContext } from '../../store/store'
+import { Link } from 'react-router-dom'
+
 const Navbar: React.FC = ({}) => {
   const { authStore } = useContext(StoreContext)
   return (
@@ -53,12 +55,14 @@ const Navbar: React.FC = ({}) => {
 
           {/* cart icon  */}
           <div className="navbar-item">
-            <span className="field navbar-link is-arrowless is-grouped icon-text">
-              <span className="is-large pr-2">
-                <i className="fas fa-shopping-cart"></i>
+            <Link to="/cart">
+              <span className="field navbar-link is-arrowless is-grouped icon-text">
+                <span className="is-large pr-2">
+                  <i className="fas fa-shopping-cart"></i>
+                </span>
+                <span className="has-text-weight-semibold">Cart</span>
               </span>
-              <span className="has-text-weight-semibold">Cart</span>
-            </span>
+            </Link>
           </div>
         </div>
       </div>
