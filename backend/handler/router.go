@@ -72,15 +72,15 @@ func NewHandler(c *Config) {
 	product.HandleFunc("/{id}", h.DeleteProduct).Methods("DELETE")                     // delete product handler
 
 	// user-cart endpoint
-	cart.HandleFunc("/", h.Hello).Methods("GET")               // fetch cart products
-	cart.HandleFunc("/{productID}", h.Hello).Methods("POST")   // add products to cart
-	cart.HandleFunc("/{productID}", h.Hello).Methods("DELETE") // delete product from cart
-	cart.HandleFunc("/{productID}", h.Hello).Methods("PUT")    // update product unit from cart
-	cart.HandleFunc("/checkout", h.Hello).Methods("POST")      // place orders
+	cart.HandleFunc("/", h.FetchCartItem).Methods("GET")                  // fetch cart products
+	cart.HandleFunc("/{productID}", h.AddCartItem).Methods("POST")        // add products to cart
+	cart.HandleFunc("/{productID}", h.RemoveCartItem).Methods("DELETE")   // delete product from cart
+	cart.HandleFunc("/{productID}", h.UpdateCartItemUnits).Methods("PUT") // update product unit from cart
+	cart.HandleFunc("/checkout", h.PlaceOrder).Methods("POST")            // place orders
 
 	// seller-orders endpoint
-	order.HandleFunc("/", h.Hello).Methods("GET")               // fetch orders products
-	order.HandleFunc("/{productid}", h.Hello).Methods("DELETE") // delete product from ordes
+	order.HandleFunc("/", h.FetchOrders).Methods("GET")                           // fetch orders products
+	order.HandleFunc("/{productid}/{productid}", h.RemoveOrder).Methods("DELETE") // delete product from ordes
 
 }
 
