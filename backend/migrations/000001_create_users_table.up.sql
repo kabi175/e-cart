@@ -4,3 +4,6 @@ CREATE TABLE IF NOT EXISTS users(
    password VARCHAR (50) NOT NULL,
   created_at TIMESTAMPTZ  NOT NULL DEFAULT (NOW())
 );
+
+
+ALTER TABLE users ADD address VARCHAR(500);
