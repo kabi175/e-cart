@@ -1,17 +1,19 @@
 package model
 
+// CartService interface defines Methods to be implemented by CartService
 type CartService interface {
-	Add(*User, string) error
-	Remove(*User, string) error
-	UpdateUnits(*User, *CartProduct) error
-	Fetch(*User) ([]*Product, error)
-	Order(*User) error
+	Add(*CartItem) error
+	Remove(*CartItem) error
+	UpdateUnits(*CartItem) error
+	Fetch(*User) ([]*CartItem, error)
+	PlaceOrder(*User) error
 }
 
+// CartRepository interface defines Methods to be implemented by CartRepository
 type CartRepository interface {
-	Add(*User, string) error
-	Remove(*User, string) error
-	UpdateUnits(*User, *CartProduct) error
-	Fetch(*User) ([]*Product, error)
-	Order(*User) error
+	Add(*CartItem) error
+	Remove(*CartItem) error
+	UpdateUnits(*CartItem) error
+	Fetch(*User) ([]*CartItem, error)
+	PlaceOrder(*User) error
 }
