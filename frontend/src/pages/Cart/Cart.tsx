@@ -76,7 +76,11 @@ const EmptyCary: React.FC = () => {
 
 const CartContanier: React.FC = () => {
   const { cartStore } = useStoreContext()
-  if (cartStore?.cart?.length == 0) {
+  if (
+    cartStore == null ||
+    cartStore.cart == null ||
+    cartStore.cart.length == 0
+  ) {
     return <EmptyCary />
   }
   return <Cart />
