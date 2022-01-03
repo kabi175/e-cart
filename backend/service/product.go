@@ -23,7 +23,7 @@ func NewProductService(c *ProductConfig) model.ProductService {
 }
 
 func (o *ProductService) Create(p *model.Product) error {
-	p.Id = ksuid.New().String()
+	p.ID = ksuid.New().String()
 	err := o.Pr.Create(p)
 	if err != nil {
 		return apperror.NewInternal()

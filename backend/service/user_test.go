@@ -17,12 +17,11 @@ func TestSignup(t *testing.T) {
 			Username: "kabi175",
 			Email:    "kabilan@gmail.com",
 			Password: "password",
-			Type:     "user",
 		}
 		userRepo := new(mocks.UserRepository)
 		userRepo.On("FindByEmail", user.Email).Return(nil, nil)
 		userRepo.On("Create", &user).Return(nil)
-		service := NewUserService(&Config{userRepo: userRepo})
+		service := NewUserService(&UserConfig{UserRepo: userRepo})
 		got := service.Signup(&user)
 		assert.Equal(t, nil, got)
 	})
@@ -32,13 +31,12 @@ func TestSignup(t *testing.T) {
 			Username: "kabi175",
 			Email:    "kabilan@gmail.com",
 			Password: "password",
-			Type:     "user",
 		}
 		userRepo := new(mocks.UserRepository)
 		userRepo.On("FindByEmail", user.Email).Return(&user, nil)
 		userRepo.On("Create", &user).Return(nil)
 
-		service := NewUserService(&Config{userRepo: userRepo})
+		service := NewUserService(&UserConfig{UserRepo: userRepo})
 		got := service.Signup(&user)
 		assert.Equal(t, apperror.NewConflict("user email", user.Email), got)
 	})
@@ -48,13 +46,12 @@ func TestSignup(t *testing.T) {
 			Username: "kabi175",
 			Email:    "kabilan@gmail.com",
 			Password: "password",
-			Type:     "user",
 		}
 		userRepo := new(mocks.UserRepository)
 		userRepo.On("FindByEmail", user.Email).Return(nil, nil)
 		userRepo.On("Create", &user).Return(errors.New("failed to reach DB"))
 
-		service := NewUserService(&Config{userRepo: userRepo})
+		service := NewUserService(&UserConfig{UserRepo: userRepo})
 		got := service.Signup(&user)
 		assert.Equal(t, apperror.NewInternal(), got)
 	})
@@ -69,7 +66,7 @@ func TestLogin(t *testing.T) {
 		userRepo := new(mocks.UserRepository)
 		userRepo.On("FindByEmail", user.Email).Return(&user, nil)
 
-		service := NewUserService(&Config{userRepo: userRepo})
+		service := NewUserService(&UserConfig{UserRepo: userRepo})
 		token, err := service.Login(&user)
 		assert.Equal(t, nil, err, "err must be nil")
 		assert.NotEqual(t, "", token, "token should not be empty")
@@ -87,7 +84,7 @@ func TestLogin(t *testing.T) {
 		userRepo := new(mocks.UserRepository)
 		userRepo.On("FindByEmail", user.Email).Return(&dbUser, nil)
 
-		service := NewUserService(&Config{userRepo: userRepo})
+		service := NewUserService(&UserConfig{UserRepo: userRepo})
 		token, err := service.Login(&user)
 		assert.Equal(t, apperror.NewAuthorization("incorrect password"), err, "err must be Auth error")
 		assert.Equal(t, "", token, "token should be empty")
@@ -101,7 +98,7 @@ func TestLogin(t *testing.T) {
 		userRepo := new(mocks.UserRepository)
 		userRepo.On("FindByEmail", user.Email).Return(nil, nil)
 
-		service := NewUserService(&Config{userRepo: userRepo})
+		service := NewUserService(&UserConfig{UserRepo: userRepo})
 		token, err := service.Login(&user)
 		assert.Equal(t, apperror.NewAuthorization("user email not found"), err, "err must be nil")
 		assert.Equal(t, "", token, "token should  be empty")

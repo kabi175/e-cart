@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/go-playground/validator"
@@ -24,14 +25,12 @@ func praseUser(r *http.Request) (*model.User, error) {
 		Password string `json:"password" validate:"required"`
 		Username string `json:"username"`
 	}{}
-
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
 		return nil, apperror.NewBadRequest(err.Error())
 	}
-
-	validate := validator.New()
-	err = validate.Struct(user)
+	log.Println(err)
+	err = validate(user)
 	if err != nil {
 		return nil, apperror.NewBadRequest(err.Error())
 	}

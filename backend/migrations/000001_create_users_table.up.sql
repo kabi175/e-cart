@@ -1,9 +1,10 @@
 CREATE TABLE IF NOT EXISTS users(
   email VARCHAR (100) PRIMARY KEY,
-   username VARCHAR (50) NOT NULL,
-   password VARCHAR (50) NOT NULL,
+  username VARCHAR (50) NOT NULL,
+  password VARCHAR (50) NOT NULL,
+  address VARCHAR(500) NOT NULL DEFAULT '',
   created_at TIMESTAMPTZ  NOT NULL DEFAULT (NOW())
 );
 
 
-ALTER TABLE users ADD address VARCHAR(500);
+ALTER TABLE users ADD ;

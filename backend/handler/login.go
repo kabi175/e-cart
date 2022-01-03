@@ -12,11 +12,18 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	user, err := praseUser(r)
 	if err != nil {
+		log.Println(err)
 		http.Error(w, err.Error(), apperror.Status(err))
 		return
 	}
 
-	token, err := h.us.Login(user)
+	err = h.us.Login(user)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), apperror.Status(err))
+		return
+	}
+	token, err := h.ts.GenerateToken(user)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), apperror.Status(err))

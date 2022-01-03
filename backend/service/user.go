@@ -7,40 +7,36 @@ import (
 
 type UserService struct {
 	userRepo model.UserRepository
-	ts       model.TokenService
 }
 
 type UserConfig struct {
-	UserRepo     model.UserRepository
-	TokenService model.TokenService
+	UserRepo model.UserRepository
 }
 
 func NewUserService(c *UserConfig) model.UserService {
 	return &UserService{
 		userRepo: c.UserRepo,
-		ts:       c.TokenService,
 	}
 }
 
-func (u *UserService) Login(user *model.User) (string, error) {
+func (u *UserService) Login(user *model.User) error {
 	// search user in DB
 	dbUser, err := u.userRepo.FindByEmail(user.Email)
 	if err != nil {
-		return "", apperror.NewInternal()
+		return apperror.NewInternal()
 	}
 	// if user not found in DB
 	if dbUser == nil {
-		return "", apperror.NewAuthorization("user email not found")
+		return apperror.NewAuthorization("user email not found")
 	}
 
 	if dbUser.Password != user.Password {
 
-		return "", apperror.NewAuthorization("incorrect password")
+		return apperror.NewAuthorization("incorrect password")
 	}
 
 	// generate token [todo]
-	token, err := u.ts.GenerateToken(user)
-	return token, err
+	return nil
 }
 
 func (u *UserService) Signup(user *model.User) error {

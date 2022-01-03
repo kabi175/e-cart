@@ -6,7 +6,7 @@ type CartService interface {
 	Remove(*CartItem) error
 	UpdateUnits(*CartItem) error
 	Fetch(*User) ([]*CartItem, error)
-	PlaceOrder(*User) error
+	EmptyCart(*User) error
 }
 
 // CartRepository interface defines Methods to be implemented by CartRepository
@@ -15,5 +15,5 @@ type CartRepository interface {
 	Remove(*CartItem) error
 	UpdateUnits(*CartItem) error
 	Fetch(*User) ([]*CartItem, error)
-	PlaceOrder(*User) error
+	EmptyCart(*User) error
 }

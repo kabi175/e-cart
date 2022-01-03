@@ -3,7 +3,7 @@ package model
 // UserService must implement the UserService interface
 type UserService interface {
 	Signup(*User) error
-	Login(*User) (string, error)
+	Login(*User) error
 }
 
 // UserRepository must implement the UserRepository interface

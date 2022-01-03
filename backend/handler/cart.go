@@ -138,7 +138,25 @@ func (h *Handler) PlaceOrder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = h.cs.PlaceOrder(user)
+	items, err := h.cs.Fetch(user)
+	if err != nil {
+		http.Error(w, err.Error(), apperror.Status(err))
+		return
+	}
+
+	for _, cartItem := range items {
+		orderItem := model.OrderItem{
+			ProductID: cartItem.ProductID,
+			UserID:    cartItem.UserID,
+		}
+		err := h.os.Add(&orderItem)
+		if err != nil {
+			http.Error(w, err.Error(), apperror.Status(err))
+			return
+		}
+	}
+
+	err = h.cs.EmptyCart(user)
 	if err != nil {
 		http.Error(w, err.Error(), apperror.Status(err))
 		return

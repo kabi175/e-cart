@@ -11,8 +11,8 @@ const Router: React.FC = () => {
     <BrowserRouter>
       <Switch>
         <Route exact path="/">
+          <Navbar />
           <SafeRoute>
-            <Navbar />
             <Home />
           </SafeRoute>
         </Route>

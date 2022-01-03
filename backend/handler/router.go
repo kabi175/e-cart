@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -42,7 +44,9 @@ func NewHandler(c *Config) {
 
 	//user endpoint subrouter
 	user := root.PathPrefix("/user").
-		HeadersRegexp("Content-Type", "application/json").Subrouter()
+		Subrouter()
+
+	user.Use(crossOriginMiddleware)
 
 	//product endpoint subrouter
 	product := root.PathPrefix("/product").Subrouter()
@@ -50,12 +54,11 @@ func NewHandler(c *Config) {
 	//cart endpoint subrouter
 	cart := root.
 		PathPrefix("/cart").
-		HeadersRegexp("Content-Type", "application/json").
 		Subrouter()
 
 	//orders endpoint subrouter
 	order := root.
-		PathPrefix("/cart").
+		PathPrefix("/order").
 		HeadersRegexp("Content-Type", "application/json").
 		Subrouter()
 
@@ -81,9 +84,17 @@ func NewHandler(c *Config) {
 	// seller-orders endpoint
 	order.HandleFunc("/", h.FetchOrders).Methods("GET")                           // fetch orders products
 	order.HandleFunc("/{productid}/{productid}", h.RemoveOrder).Methods("DELETE") // delete product from ordes
-
+	root.HandleFunc("/hello", h.Hello)
 }
 
 func (Handler) Hello(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Helle!"))
+	log.Println("hello endpoint")
+	hello := struct {
+		Msg string `json:"msg"`
+	}{Msg: "hello"}
+	body, err := json.Marshal(hello)
+	if err != nil {
+		log.Println(err)
+	}
+	w.Write([]byte(body))
 }

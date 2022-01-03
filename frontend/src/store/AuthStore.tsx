@@ -1,21 +1,33 @@
-import { makeAutoObservable } from 'mobx'
+import { runInAction, makeAutoObservable } from 'mobx'
 import { RootStore } from './store'
-
+import { login, signup } from '../api/user'
 export class AuthStore {
   userName: string | null = null
   rootStore: RootStore | null = null
 
   constructor(rootStore: RootStore) {
     makeAutoObservable(this)
-    this.userName = 'kabi'
     this.rootStore = rootStore
+    this.userName = null
   }
 
-  signIn(userName: string, password: string): void {
-    //sign in
-    if (this.rootStore?.authStore) {
-      this.rootStore.authStore.userName = userName
-    }
+  async signup(email: string, userName: string, password: string) {
+    const username = await signup(email, password, userName)
+
+    runInAction(() => {
+      if (this.rootStore?.authStore != null) {
+        this.rootStore.authStore.userName = username
+      }
+    })
+  }
+  async login(email: string, password: string) {
+    const username = await login(email, password)
+    console.log(username)
+    runInAction(() => {
+      if (username != null && this.rootStore?.authStore != null) {
+        this.rootStore.authStore.userName = username
+      }
+    })
   }
 
   signOut(): void {

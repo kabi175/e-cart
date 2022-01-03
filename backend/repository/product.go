@@ -25,7 +25,7 @@ func NewProductRepository(c *ProductConfig) model.ProductRepository {
 func (pr *ProductRepository) Create(p *model.Product) error {
 	query := `INSERT INTO products(id, name, seller_id, stock, category) VALUES( $1 , $2 , $3 , $4 , $5 )`
 
-	result, err := pr.DB.Exec(query, p.Id, p.Name, p.SellerID, p.Stock, p.Category)
+	result, err := pr.DB.Exec(query, p.ID, p.Name, p.SellerID, p.Stock, p.Category)
 	if err != nil {
 		log.Println(err)
 		return apperror.NewInternal()
@@ -72,7 +72,7 @@ func (pr *ProductRepository) FindById(pId string) (*model.Product, error) {
 						FROM products 
 						WHERE id = $1`
 
-	err := pr.DB.QueryRow(query, pId).Scan(&p.Id, &p.SellerID, &p.Name, &p.Stock, &p.Category)
+	err := pr.DB.QueryRow(query, pId).Scan(&p.ID, &p.SellerID, &p.Name, &p.Stock, &p.Category)
 
 	if err != nil {
 
@@ -96,7 +96,7 @@ func (pr *ProductRepository) FindByCategory(category string) ([]*model.Product, 
 	}
 	for result.Next() {
 		p := &model.Product{}
-		result.Scan(&p.Id, &p.SellerID, &p.Name, &p.Stock, &p.Category)
+		result.Scan(&p.ID, &p.SellerID, &p.Name, &p.Stock, &p.Category)
 		products = append(products, p)
 	}
 	return products, nil
@@ -113,7 +113,7 @@ func (pr *ProductRepository) FindBySeller(sellerId string) ([]*model.Product, er
 	}
 	for result.Next() {
 		p := &model.Product{}
-		result.Scan(&p.Id, &p.SellerID, &p.Name, &p.Stock, &p.Category)
+		result.Scan(&p.ID, &p.SellerID, &p.Name, &p.Stock, &p.Category)
 		products = append(products, p)
 	}
 	return products, nil
@@ -133,7 +133,7 @@ func (pr *ProductRepository) Fetch(limit, offset int) ([]*model.Product, error) 
 
 	for result.Next() {
 		p := &model.Product{}
-		result.Scan(&p.Id, &p.SellerID, &p.Name, &p.Stock, &p.Category)
+		result.Scan(&p.ID, &p.SellerID, &p.Name, &p.Stock, &p.Category)
 		products = append(products, p)
 	}
 

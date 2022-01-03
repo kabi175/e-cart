@@ -36,7 +36,7 @@ func (c *CartService) Fetch(user *model.User) ([]*model.CartItem, error) {
 	return items, err
 }
 
-func (c *CartService) PlaceOrder(user *model.User) error {
-	err := c.cr.PlaceOrder(user)
+func (c *CartService) EmptyCart(user *model.User) error {
+	err := c.cr.EmptyCart(user)
 	return err
 }

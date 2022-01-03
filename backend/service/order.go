@@ -16,6 +16,10 @@ func NewOrderService(c *OrderConfig) model.OrderService {
 	}
 }
 
+func (o *OrderService) Add(item *model.OrderItem) error {
+	err := o.or.Add(item)
+	return err
+}
 func (o *OrderService) Remove(item *model.OrderItem) error {
 	err := o.or.Remove(item)
 	return err

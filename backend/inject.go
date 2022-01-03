@@ -17,26 +17,40 @@ func inject() *mux.Router {
 
 	userRepository := repository.NewUserRepository(&repository.Config{DB: db})
 
-	tokenService := service.NewTokenService(&service.TokenConfig{
-		Key: secretKey,
-	})
+	productRepository := repository.NewProductRepository(&repository.ProductConfig{DB: db})
+
+	cartRepository := repository.NewCartRepository(&repository.CartConfig{DB: db})
+
+	orderRepository := repository.NewOrderRepository(&repository.OrderConfig{DB: db})
 
 	userService := service.NewUserService(&service.UserConfig{
-		UserRepo:     userRepository,
-		TokenService: tokenService,
+		UserRepo: userRepository,
 	})
 
-	ProductRepository := repository.NewProductRepository(&repository.ProductConfig{DB: db})
+	productService := service.NewProductService(&service.ProductConfig{
+		Pr: productRepository,
+	})
 
-	ProductService := service.NewProductService(&service.ProductConfig{
-		Pr: ProductRepository,
+	cartService := service.NewCartService(&service.CartCongig{
+		Cr: cartRepository,
+	})
+
+	orderService := service.NewOrderService(&service.OrderConfig{
+		Or: orderRepository,
+	})
+
+	tokenService := service.NewTokenService(&service.TokenConfig{
+		Key: secretKey,
 	})
 
 	router := mux.NewRouter()
 	handler.NewHandler(&handler.Config{
 		Router: router,
 		Us:     userService,
-		Ps:     ProductService,
+		Ps:     productService,
+		Cs:     cartService,
+		Os:     orderService,
+		Ts:     tokenService,
 	})
 	return router
 }

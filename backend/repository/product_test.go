@@ -19,7 +19,7 @@ func TestCreateProduct(t *testing.T) {
 
 	t.Run("Success", func(t *testing.T) {
 		product := model.Product{
-			Id:       ksuid.New().String(),
+			ID:       ksuid.New().String(),
 			Name:     "t-shirt",
 			Stock:    100,
 			SellerID: ksuid.New().String(),
